@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algalog.domain.model.Cliente;
 import com.algaworks.algalog.domain.repository.ClienteRepository;
+import com.algaworks.algalog.domain.service.CatalogoClienteService;
 
 import lombok.AllArgsConstructor;
 
@@ -30,6 +31,7 @@ public class ClienteController {
 	@Autowired // define que queremos injetar uma instância que está sendo
 	// gerenciada pelo Spring. Obs.: O Spring faz uma instânciação da interface "magicamente"
 	private ClienteRepository clienteRepository;
+	private CatalogoClienteService catalogoClienteService;
 	
 	@GetMapping // Mapeia a requisição com o método.
 	// Chegando a requisição, o método abaixo é disparado.
@@ -60,7 +62,8 @@ public class ClienteController {
 	// RequestBody vincula o parâmetro do método ao body da requisição
 	// @Valid abaixo valida a entrada de acordo com as especificações da classe Cliente.java
 	public Cliente adicionar(@Valid @RequestBody Cliente cliente) {
-		return clienteRepository.save(cliente); // Já salva e retorna
+		//return clienteRepository.save(cliente); // Já salva e retorna
+		return catalogoClienteService.salvar(cliente);
 	}
 	
 	@PutMapping("/{clienteId}") // Fazendo o binding
@@ -70,7 +73,9 @@ public class ClienteController {
 			return ResponseEntity.notFound().build();
 		}
 		cliente.setId(clienteId); // Necessário para forçar a atualização
-		cliente = clienteRepository.save(cliente);
+//		cliente = clienteRepository.save(cliente);
+		cliente = catalogoClienteService.salvar(cliente); // add após a criação do CatalogoClienteService
+		
 		return ResponseEntity.ok(cliente); // Retorna OK (codigo 200)
 	}
 	
@@ -80,7 +85,8 @@ public class ClienteController {
 			return ResponseEntity.notFound().build();
 		}
 		
-		clienteRepository.deleteById(clienteId);
+//		clienteRepository.deleteById(clienteId);
+		catalogoClienteService.excluir(clienteId); // Add após a criação do CatalogoClienteService
 		
 		return ResponseEntity.noContent().build(); // Retorna 204. Sucesso sem body
 		

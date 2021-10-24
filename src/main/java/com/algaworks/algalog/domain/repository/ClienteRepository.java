@@ -1,6 +1,7 @@
 package com.algaworks.algalog.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,5 @@ public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 	List<Cliente> findByNome(String nome); // findByNome -> é um padrão para a consulta. 
 	// By é um delimitador e Nome é uma expressão/propriedade
 	List<Cliente> findByNomeContaining(String nome); // Containing -> igual ao LIKE do MySQL
+	Optional<Cliente> findByEmail(String email);
 }
